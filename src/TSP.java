@@ -93,7 +93,7 @@ public class TSP {
 		int size = 4;
 		for (int i = 1; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				TSP travel = new TSP(size * i);
+				TSP travel = new TSP(size+ i);
 				Timer timer = new Timer();
 
 				timer.start();

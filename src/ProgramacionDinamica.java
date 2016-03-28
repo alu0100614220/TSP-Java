@@ -34,7 +34,7 @@ public class ProgramacionDinamica {
 		return min;
 	}
 
-	public int MIN(int nodoActual, int inputSet[], int setSize) {
+	public int MIN(int nodoActual, int auxSet[], int setSize) {
 		if (setSize == 0)
 			return this.tsp.get(nodoActual).tabla.get(this.tsp.get(0));
 		int min = MAXVALUE, minindex = 0;
@@ -42,13 +42,13 @@ public class ProgramacionDinamica {
 		for (int i = 0; i < setSize; i++) {
 			int k = 0;
 			for (int j = 0; j < setSize; j++) {
-				if (inputSet[i] != inputSet[j])
-					proximoSet[k++] = inputSet[j];
+				if (auxSet[i] != auxSet[j])
+					proximoSet[k++] = auxSet[j];
 			}
-			int temp = calculaCoste(inputSet[i], proximoSet, setSize - 1);
-			if (this.tsp.get(nodoActual).tabla.get(this.tsp.get(inputSet[i])) + temp < min) {
-				min = this.tsp.get(nodoActual).tabla.get(this.tsp.get(inputSet[i])) + temp;
-				minindex = inputSet[i];
+			int temp = calculaCoste(auxSet[i], proximoSet, setSize - 1);
+			if (this.tsp.get(nodoActual).tabla.get(this.tsp.get(auxSet[i])) + temp < min) {
+				min = this.tsp.get(nodoActual).tabla.get(this.tsp.get(auxSet[i])) + temp;
+				minindex = auxSet[i];
 			}
 		}
 		return minindex;
@@ -62,22 +62,22 @@ public class ProgramacionDinamica {
 	}
 
 	public void creaTour() {
-		int previousSet[] = new int[size - 1];
-		int nextSet[] = new int[size - 2];
+		int setPrevio[] = new int[size - 1];
+		int setSig[] = new int[size - 2];
 		for (int i = 1; i < size; i++)
-			previousSet[i - 1] = i;
+			setPrevio[i - 1] = i;
 		int setSize = size - 1;
-		camino.set(0, tsp.get(MIN(0, previousSet, setSize)));
+		camino.set(0, tsp.get(MIN(0, setPrevio, setSize)));
 		for (int i = 1; i < size - 1; i++) {
 			int k = 0;
 			for (int j = 0; j < setSize; j++) {
-				if (camino.get(i - 1).getNumber() - 1 != previousSet[j])
-					nextSet[k++] = previousSet[j];
+				if (camino.get(i - 1).getNumber() - 1 != setPrevio[j])
+					setSig[k++] = setPrevio[j];
 			}
 			setSize--;
-			camino.set(i, tsp.get(MIN(camino.get(i - 1).getNumber() - 1, nextSet, setSize)));
+			camino.set(i, tsp.get(MIN(camino.get(i - 1).getNumber() - 1, setSig, setSize)));
 			for (int j = 0; j < setSize; j++)
-				previousSet[j] = nextSet[j];
+				setPrevio[j] = setSig[j];
 		}
 
 		show();
